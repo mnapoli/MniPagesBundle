@@ -11,6 +11,13 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 abstract class BaseComponentController extends Controller
 {
     /**
+     * Returns the component's class name.
+     *
+     * @return string
+     */
+    abstract protected function getComponentName();
+
+    /**
      * Route all requests to the component.
      *
      * @param Request $request
@@ -34,12 +41,12 @@ abstract class BaseComponentController extends Controller
     /**
      * Route a GET request to the component.
      *
-     * @param BaseComponent $page
+     * @param BaseComponent $component
      * @return Response
      */
-    private function routeGet(BaseComponent $page)
+    private function routeGet(BaseComponent $component)
     {
-        return $page->render();
+        return $component->render();
     }
 
     /**
@@ -82,6 +89,19 @@ abstract class BaseComponentController extends Controller
         // Call action
         $reflectionMethod->invokeArgs($component, $parameters);
 
+        return $this->returnPostResponse($component, $request);
+    }
+
+    /**
+     * Returns the response for a POST request.
+     *
+     * @param BaseComponent $component
+     * @param Request       $request
+     * @return Response
+     * @throws BadRequestHttpException
+     */
+    protected function returnPostResponse(BaseComponent $component, Request $request)
+    {
         // Do we need to render the component?
         $refreshComponent = $request->get('_render');
         if ($refreshComponent === null) {
@@ -94,11 +114,4 @@ abstract class BaseComponentController extends Controller
 
         return $component->render();
     }
-
-    /**
-     * Returns the component's class name.
-     *
-     * @return string
-     */
-    abstract protected function getComponentName();
 }
