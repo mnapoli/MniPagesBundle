@@ -1,4 +1,5 @@
 {
+    "name": "mnapoli/pages-bundle",
     "autoload": {
         "psr-0": { "Mni": "src/" }
     },
