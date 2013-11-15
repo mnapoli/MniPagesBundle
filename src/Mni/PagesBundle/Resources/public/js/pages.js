@@ -14,93 +14,103 @@ var Pages = Pages || {};
  * @type {string}
  */
 Pages.componentRoute = '';
-
-/**
- * Page class.
- * @constructor
- */
-Pages.Page = function () {
-    this.callAction = function (data, ajax) {
-        if (ajax) {
-            // Ajax post
-            $.post(window.location.pathname, data);
-        } else {
-            // Non-ajax post
-            var form = $('<form/>', {
-                action: '',
-                method: 'post'
-            });
-            $.each(data, function(name, value) {
-                form.append($('<input/>', {
-                    type: 'hidden',
-                    name: name,
-                    value: value
-                }));
-            });
-            form.appendTo('body').submit();
-        }
+Pages.getComponentRoute = function() {
+    if (Pages.componentRoute == '') {
+        throw "'Pages.componentRoute' must be defined and have as value the route: 'pages_component'";
     }
+    return Pages.componentRoute;
 };
 
-/**
- * Component class.
- * @param {string} name Name of the component, in the form: "AcmeBundle:Name"
- * @param dom
- * @constructor
- */
-Pages.Component = function (name, dom) {
-    var self = this;
+jQuery(function($) {
 
-    this.name = name;
-    this.dom = dom;
-
-    // Attach to DOM
-    $(this.dom).data('component', this);
-
-    this.callAction = function (data, refresh) {
-        data.name = self.name;
-        $.post(Pages.componentRoute, data, function (html) {
-            if (refresh) {
-                $(self.dom).html(html);
+    /**
+     * Page class.
+     * @constructor
+     */
+    Pages.Page = function () {
+        this.callAction = function(data, ajax) {
+            if (ajax) {
+                // Ajax post
+                $.post(window.location.pathname, data);
+            } else {
+                // Non-ajax post
+                var form = $('<form/>', {
+                    action: '',
+                    method: 'post'
+                });
+                $.each(data, function(name, value) {
+                    form.append($('<input/>', {
+                        type: 'hidden',
+                        name: name,
+                        value: value
+                    }));
+                });
+                form.appendTo('body').submit();
             }
-        });
-    }
-};
-
-// Create current page
-Pages.currentPage = new Pages.Page();
-
-// Create a component object for each component
-Pages.components = [];
-$('[data-component]').each(function (index, object) {
-    var name = $(object).attr('data-component');
-    Pages.components.push(new Pages.Component(name, object));
-});
-
-$('body').on('click', '[data-page-action]', function(e) {
-    e.preventDefault();
-
-    var action = $(this).data('page-action');
-    var refreshPage = ($(this).attr('data-page-refresh') !== undefined);
-
-    var data = {
-        action: action
+        }
     };
 
-    Pages.currentPage.callAction(data, !refreshPage);
-});
+    /**
+     * Component class.
+     * @param {string} name Name of the component, in the form: "AcmeBundle:Name"
+     * @param dom
+     * @constructor
+     */
+    Pages.Component = function (name, dom) {
+        var self = this;
 
-$('[data-component]').on('click', '[data-component-action]', function(e) {
-    e.preventDefault();
+        this.name = name;
+        this.dom = dom;
 
-    var component = $(this).closest('[data-component]').data('component');
+        // Attach to DOM
+        $(this.dom).data('component', this);
 
-    var action = $(this).data('component-action');
-    var refreshComponent = ($(this).attr('data-component-refresh') !== undefined);
-
-    var data = {
-        action: action
+        this.callAction = function(data, refresh) {
+            data._componentName = self.name;
+            $.post(Pages.getComponentRoute(), data, function (html) {
+                if (refresh) {
+                    $(self.dom).html(html);
+                }
+            });
+        }
     };
 
-    component.callAction(data, refreshComponent);
+    // Create current page
+    Pages.currentPage = new Pages.Page();
+
+    // Create a component object for each component
+    Pages.components = [];
+    $('[data-component]').each(function(index, object) {
+        var name = $(object).attr('data-component');
+        Pages.components.push(new Pages.Component(name, object));
+    });
+
+    $('body').on('click', '[data-page-action]', function(e) {
+        e.preventDefault();
+
+        var action = $(this).data('page-action');
+        var refreshPage = ($(this).attr('data-page-refresh') !== undefined);
+
+        var data = {
+            action: action
+        };
+
+        Pages.currentPage.callAction(data, !refreshPage);
+    });
+
+    $('[data-component]').on('click', '[data-component-action]', function(e) {
+        e.preventDefault();
+
+        var component = $(this).closest('[data-component]').data('component');
+
+        var action = $(this).data('component-action');
+        var refreshComponent = ($(this).attr('data-component-refresh') !== undefined);
+
+        var data = {
+            action: action
+        };
+
+        component.callAction(data, refreshComponent);
+    });
+
 });

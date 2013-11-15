@@ -1,7 +1,9 @@
 parameters:
-#    mni_pages.example.class: Mni\PagesBundle\Example
 
 services:
-#    mni_pages.example:
-#        class: %mni_pages.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    mnapoli.twig.pages_extension:
+        class: Mni\PagesBundle\Twig\PagesExtension
+        arguments:
+            - "@fragment.handler"
+        tags:
+            - { name: twig.extension }

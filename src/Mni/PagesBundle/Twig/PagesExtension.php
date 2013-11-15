@@ -43,7 +43,7 @@ class PagesExtension extends Twig_Extension
     public function getFunctions()
     {
         return array(
-            new Twig_SimpleFunction('component', [$this, 'component'], array('is_safe' => array('html'))),
+            new Twig_SimpleFunction('component', array($this, 'component'), array('is_safe' => array('html'))),
         );
     }
 
