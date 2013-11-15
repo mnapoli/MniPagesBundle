@@ -48,6 +48,8 @@ namespace Acme\AcmeBundle\Page;
 
 class HomePage extends BasePage
 {
+    protected $title = 'Hello!';
+
     public function getTemplate()
     {
         return 'AcmeBundle:Home:page.html.twig';
@@ -56,3 +58,10 @@ class HomePage extends BasePage
 ```
 
 `getTemplate()` returns the template of your page.
+
+Every property is passed to the view:
+
+```html
+<h1>{{ title }}</h1>
+<p>This is an example.</p>
+```
