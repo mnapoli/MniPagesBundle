@@ -2,29 +2,17 @@
 
 namespace Mni\PagesDemoBundle\Controller;
 
-use Mni\PagesDemoBundle\Component\RandomNumberComponent;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Mni\PagesBundle\Controller\BaseComponentController;
 
-class RandomNumberComponentController extends Controller
+class RandomNumberComponentController extends BaseComponentController
 {
-    public function defaultAction(Request $request)
+    /**
+     * Returns the component's class name.
+     *
+     * @return string
+     */
+    protected function getComponentName()
     {
-        $component = new RandomNumberComponent($request, $this->container);
-
-        // POST -> action
-        if ($request->isMethod('POST')) {
-            $action = $request->get('_action');
-
-            if ($action == '') {
-                throw new BadRequestHttpException("HTTP parameter '_action' must be given");
-            }
-
-            // Call action
-            $component->$action();
-        }
-
-        return $component->render();
+        return 'Mni\PagesDemoBundle\Component\RandomNumberComponent';
     }
 }

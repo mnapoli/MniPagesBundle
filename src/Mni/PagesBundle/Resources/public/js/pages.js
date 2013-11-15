@@ -129,8 +129,31 @@ jQuery(function($) {
         var refreshComponent = ($(this).attr('data-component-refresh') !== undefined);
 
         var data = {
-            _action: action
+            _action: action,
+            _render: refreshComponent
         };
+
+        component.callAction(data, refreshComponent);
+    });
+
+    // Component > form
+    allComponents.on('submit', 'form[data-component-action]', function(e) {
+        e.preventDefault();
+
+        var component = $(this).closest('[data-component]').data('component');
+
+        var action = $(this).data('component-action');
+        var refreshComponent = ($(this).attr('data-component-refresh') !== undefined);
+
+        var data = {
+            _action: action,
+            _render: refreshComponent
+        };
+
+        // Form data
+        $.each($(this).serializeArray(), function(index, input) {
+            data[input.name] = input.value;
+        });
 
         component.callAction(data, refreshComponent);
     });

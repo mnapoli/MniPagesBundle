@@ -7,8 +7,16 @@
             Random number: <code>{{ number }}</code>
         </p>
 
+        <form class="form-inline pull-right" data-component-action="setNumber" data-component-refresh>
+            <div class="form-group">
+                <input type="text" class="form-control" name="number" placeholder="{{ number }}">
+            </div>
+            <button type="submit" class="btn btn-default">Set number</button>
+        </form>
+
         <p>
-            <button type="button" class="btn btn-primary" data-component-action="generateNumber" data-component-refresh>
+            <button type="button" class="btn btn-primary" data-component-action="generateNumber"
+                    data-component-refresh>
                 Generate a new number
             </button>
         </p>
@@ -22,9 +30,9 @@
             As you can see, only one component is refreshed, the other one keeps the old value.
         </p>
         <pre><code>&lt;button type=&quot;button&quot;
-    data-component-action=&quot;generateNumber&quot;
-    data-component-refresh&gt;
-        Generate a new number
+        data-component-action=&quot;generateNumber&quot;
+        data-component-refresh&gt;
+    Generate a new number
 &lt;/button&gt;</code></pre>
 
     </div>

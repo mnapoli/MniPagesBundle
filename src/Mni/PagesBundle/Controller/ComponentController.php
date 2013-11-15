@@ -10,7 +10,7 @@ class ComponentController extends Controller
     public function routeAction(Request $request)
     {
         list($bundle, $componentName) = explode(':', $request->get('_componentName'));
-        $controller = "$bundle:{$componentName}Component:default";
+        $controller = "$bundle:{$componentName}Component:route";
 
         // Forward POST parameters
         $parameters = $this->getRequest()->request->all();

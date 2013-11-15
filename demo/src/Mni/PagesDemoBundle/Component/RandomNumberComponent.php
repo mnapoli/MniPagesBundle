@@ -22,8 +22,13 @@ class RandomNumberComponent extends BaseComponent
 
     public function generateNumber()
     {
-        $this->number = rand(0, 1000);
-        $this->get('session')->set('number', $this->number);
+        $this->setNumber(rand(0, 1000));
+    }
+
+    public function setNumber($number)
+    {
+        $this->number = $number;
+        $this->get('session')->set('number', $number);
     }
 
     public function getTemplate()

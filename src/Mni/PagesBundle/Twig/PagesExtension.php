@@ -56,7 +56,7 @@ class PagesExtension extends Twig_Extension
      */
     public function component($component, array $parameters = array())
     {
-        $controller = $component . 'Component:default';
+        $controller = $component . 'Component:route';
         $uri = new ControllerReference($controller, $parameters);
 
         $html = $this->handler->render($uri);
