@@ -20,7 +20,7 @@ class RandomNumberComponent extends BaseComponent
         parent::__construct($request, $container);
 
         $this->id = $request->get('id');
-        $this->number = $this->get('session')->get('number', 0);
+        $this->number = $this->get('session')->get('number' . $this->id, 0);
     }
 
     public function generateNumber()
@@ -31,7 +31,7 @@ class RandomNumberComponent extends BaseComponent
     public function setNumber($number)
     {
         $this->number = $number;
-        $this->get('session')->set('number', $number);
+        $this->get('session')->set('number' . $this->id, $number);
     }
 
     public function getTemplate()
