@@ -37,6 +37,7 @@ public function registerBundles()
 ```yaml
 mni_pages:
     resource: "@MniPagesBundle/Resources/config/routing.yml"
+    prefix:   /mnipages # you can prefix those routes to avoid conflicts with yours
 ```
 
 - import the Javascript files into the page and configure it, for example in the `<head>` tag:

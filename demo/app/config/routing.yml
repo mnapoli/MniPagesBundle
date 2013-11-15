@@ -5,3 +5,4 @@ mni_pagesdemo:
 # MniPagesBundle routes
 mni_pages:
     resource: "@MniPagesBundle/Resources/config/routing.yml"
+    prefix:   /mnipages
