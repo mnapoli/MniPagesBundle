@@ -20,9 +20,9 @@
     </div>
 
     <div class="row">
-        {{ component('MniPagesDemoBundle:RandomNumber') }}
+        {{ component('MniPagesDemoBundle:RandomNumber', {id: '1'}) }}
 
-        {{ component('MniPagesDemoBundle:RandomNumber') }}
+        {{ component('MniPagesDemoBundle:RandomNumber', {id: '2'}) }}
     </div>
 
 {% endblock %}

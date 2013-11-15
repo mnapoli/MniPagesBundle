@@ -11,12 +11,15 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class RandomNumberComponent extends BaseComponent
 {
+    protected $id;
+
     protected $number;
 
     public function __construct(Request $request, ContainerInterface $container)
     {
         parent::__construct($request, $container);
 
+        $this->id = $request->get('id');
         $this->number = $this->get('session')->get('number', 0);
     }
 
