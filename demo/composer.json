@@ -1,6 +1,9 @@
 {
     "autoload": {
-        "psr-0": { "": "src/" }
+        "psr-0": {
+            "Mni\\PagesDemoBundle\\": "src/",
+            "Mni\\PagesBundle\\": "../src/"
+        }
     },
     "require": {
         "php": ">=5.3.3",

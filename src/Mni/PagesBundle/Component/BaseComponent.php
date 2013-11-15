@@ -3,6 +3,7 @@
 namespace Mni\PagesBundle\Component;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 abstract class BaseComponent
@@ -12,7 +13,7 @@ abstract class BaseComponent
      */
     protected $container;
 
-    public function __construct(ContainerInterface $container)
+    public function __construct(Request $request, ContainerInterface $container)
     {
         $this->container = $container;
     }
