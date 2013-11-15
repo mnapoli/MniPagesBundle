@@ -1,37 +1,53 @@
-# Creating a page
+# Pages
+
+## HTML & JS API
+
+- `data-page-action="generateNumber"`
+
+Can be used on a link, button or form.
+
+```html
+<button type="button" data-page-action="generateNumber">Generate number</button>
+```
+
+Will call `generateNumber` on the page through an AJAX POST request.
+
+- `data-page-refresh`
+
+```html
+<button type="button" data-page-action="generateNumber" data-page-refresh>Generate number</button>
+```
+
+Will call `generateNumber` and refresh the page.
+
+Example with a form:
+
+```html
+<form class="form-inline" data-page-action="setTitle" data-page-refresh>
+    <input type="text" name="title">
+    <button type="submit">Update title</button>
+</form>
+```
+
+
+## Creating a page
 
 - create the route:
 
 ```yaml
 home:
     pattern:  /
-    defaults: { _controller: "AcmeBundle:Home:default" }
+    defaults: { _controller: "AcmeBundle:Home:route" }
 ```
 
 - create the controller:
 
 ```php
-class HomeController extends Controller
+class HomeController extends \Mni\PagesBundle\Controller\BasePageController
 {
-    public function defaultAction(Request $request)
+    protected function getPageName()
     {
-        $page = new HomePage($request, $this->container);
-
-        // POST -> action
-        if ($request->isMethod('POST')) {
-            $action = $request->get('action');
-
-            if ($action == '') {
-                throw new BadRequestHttpException("HTTP parameter 'action' must be given");
-            }
-
-            // Call action
-            $page->$action();
-
-            return $this->redirect($this->generateUrl('home'));
-        }
-
-        return $page->render();
+        return 'Mni\PagesDemoBundle\Page\HomePage';
     }
 }
 ```

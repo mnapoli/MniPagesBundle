@@ -15,10 +15,10 @@ class RandomNumberComponentController extends Controller
 
         // POST -> action
         if ($request->isMethod('POST')) {
-            $action = $request->get('action');
+            $action = $request->get('_action');
 
             if ($action == '') {
-                throw new BadRequestHttpException("HTTP parameter 'action' must be given");
+                throw new BadRequestHttpException("HTTP parameter '_action' must be given");
             }
 
             // Call action

@@ -79,26 +79,48 @@ jQuery(function($) {
     Pages.currentPage = new Pages.Page();
 
     // Create a component object for each component
+    var allComponents = $('[data-component]');
     Pages.components = [];
-    $('[data-component]').each(function(index, object) {
+    allComponents.each(function(index, object) {
         var name = $(object).attr('data-component');
         Pages.components.push(new Pages.Component(name, object));
     });
 
-    $('body').on('click', '[data-page-action]', function(e) {
+    // Page > link or button
+    $('body').on('click', 'a[data-page-action], button[data-page-action]', function(e) {
         e.preventDefault();
 
         var action = $(this).data('page-action');
         var refreshPage = ($(this).attr('data-page-refresh') !== undefined);
 
         var data = {
-            action: action
+            _action: action
         };
 
         Pages.currentPage.callAction(data, !refreshPage);
     });
 
-    $('[data-component]').on('click', '[data-component-action]', function(e) {
+    // Page > form
+    $('body').on('submit', 'form[data-page-action]', function(e) {
+        e.preventDefault();
+
+        var action = $(this).data('page-action');
+        var refreshPage = ($(this).attr('data-page-refresh') !== undefined);
+
+        var data = {
+            _action: action
+        };
+
+        // Form data
+        $.each($(this).serializeArray(), function(index, input) {
+            data[input.name] = input.value;
+        });
+
+        Pages.currentPage.callAction(data, !refreshPage);
+    });
+
+    // Component > link or button
+    allComponents.on('click', 'a[data-component-action], button[data-component-action]', function(e) {
         e.preventDefault();
 
         var component = $(this).closest('[data-component]').data('component');
@@ -107,7 +129,7 @@ jQuery(function($) {
         var refreshComponent = ($(this).attr('data-component-refresh') !== undefined);
 
         var data = {
-            action: action
+            _action: action
         };
 
         component.callAction(data, refreshComponent);
