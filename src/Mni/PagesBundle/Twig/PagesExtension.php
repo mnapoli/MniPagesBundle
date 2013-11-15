@@ -61,6 +61,9 @@ class PagesExtension extends Twig_Extension
 
         $html = $this->handler->render($uri);
 
-        return '<div data-component="' . $component . '">' . $html . '</div>';
+        $jsonParameters = json_encode($parameters);
+
+        return "<div data-component='$component' data-parameters='$jsonParameters'>"
+            . $html . "</div>";
     }
 }

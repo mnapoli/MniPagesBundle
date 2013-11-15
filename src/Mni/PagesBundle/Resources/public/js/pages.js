@@ -54,19 +54,29 @@ jQuery(function($) {
      * Component class.
      * @param {string} name Name of the component, in the form: "AcmeBundle:Name"
      * @param dom
+     * @param parameters
      * @constructor
      */
-    Pages.Component = function (name, dom) {
+    Pages.Component = function (name, dom, parameters) {
         var self = this;
 
         this.name = name;
         this.dom = dom;
+        this.parameters = parameters;
 
         // Attach to DOM
         $(this.dom).data('component', this);
 
         this.callAction = function(data, refresh) {
             data._componentName = self.name;
+
+            // Add component's parameters
+            for (var key in self.parameters) {
+                if (self.parameters.hasOwnProperty(key) && !data.hasOwnProperty(key)) {
+                    data[key] = self.parameters[key];
+                }
+            }
+
             $.post(Pages.getComponentRoute(), data, function (html) {
                 if (refresh) {
                     $(self.dom).html(html);
@@ -83,7 +93,8 @@ jQuery(function($) {
     Pages.components = [];
     allComponents.each(function(index, object) {
         var name = $(object).attr('data-component');
-        Pages.components.push(new Pages.Component(name, object));
+        var parameters = JSON.parse($(object).attr('data-parameters'));
+        Pages.components.push(new Pages.Component(name, object, parameters));
     });
 
     // Page > link or button
