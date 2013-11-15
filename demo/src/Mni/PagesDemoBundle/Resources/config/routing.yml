@@ -1,3 +1,3 @@
 home:
     pattern:  /
-    defaults: { _controller: "MniPagesDemoBundle:Home:index" }
+    defaults: { _controller: "MniPagesDemoBundle:Home:default" }
