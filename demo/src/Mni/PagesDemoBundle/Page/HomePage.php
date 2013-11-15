@@ -14,4 +14,3 @@ class HomePage extends BasePage
         return 'MniPagesDemoBundle:Home:page.html.twig';
     }
 }
- 
