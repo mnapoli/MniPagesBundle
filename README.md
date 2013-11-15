@@ -41,7 +41,7 @@ mni_pages:
 
 - import the Javascript files into the page and configure it, for example in the `<head>` tag:
 
-```twig
+```html
 {% javascripts
     '@MniPagesBundle/Resources/public/js/*' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
