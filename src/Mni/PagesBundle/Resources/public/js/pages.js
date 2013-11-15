@@ -16,7 +16,7 @@ var Pages = Pages || {};
 Pages.componentRoute = '';
 Pages.getComponentRoute = function() {
     if (Pages.componentRoute == '') {
-        throw "'Pages.componentRoute' must be defined and have as value the route: 'pages_component'";
+        throw "'Pages.componentRoute' must be defined and have as value the route: 'mni_pages_component'";
     }
     return Pages.componentRoute;
 };
