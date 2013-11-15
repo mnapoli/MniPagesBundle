@@ -11,9 +11,12 @@
     </p>
     <p>
         The "Generate" button will call the action <code>generateNumber()</code> on the component
-        and refresh it without reloading the page.
+        and refresh it without reloading the page. The number is stored in session.
     </p>
     <p>
-        The number is stored in session.
+        As you can see, only one component is refreshed, the other one keeps the old value.
     </p>
+    <pre><code>&lt;button type=&quot;button&quot; data-component-action=&quot;generateNumber&quot; data-component-refresh&gt;
+    Generate a new number
+&lt;/button&gt;</code></pre>
 </div>
