@@ -1,17 +1,33 @@
-{% extends "TwigBundle::layout.html.twig" %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-{% block title 'Demo' %}
+    <title>{% block title %}MniPagesBundle demo{% endblock %}</title>
 
-{% block body %}
+    {% stylesheets 'bundles/mopabootstrap/bootstrap/dist/css/*.min.css' filter='cssrewrite' %}
+        <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
 
-    {% for flashMessage in app.session.flashbag.get('notice') %}
-        <div class="flash-message">
-            <em>Notice</em>: {{ flashMessage }}
-        </div>
-    {% endfor %}
+    {% javascripts
+        '@MniPagesDemoBundle/Resources/public/js/*'
+        'bundles/mopabootstrap/bootstrap/dist/js/bootstrap.min.js'
+        '@MniPagesBundle/Resources/public/js/*' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 
-    <div class="block">
+    <script type="text/javascript">
+        var Pages = Pages || {};
+        Pages.componentRoute = '{{ path('mni_pages_component') }}';
+    </script>
+</head>
+<body>
+
+    <div class="container">
+
         {% block content %}{% endblock %}
+
     </div>
 
-{% endblock %}
+</body>
+</html>

@@ -13,6 +13,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+            new Mopa\Bundle\BootstrapBundle\MopaBootstrapBundle(),
             new Mni\PagesBundle\MniPagesBundle(),
             new Mni\PagesDemoBundle\MniPagesDemoBundle(),
         );

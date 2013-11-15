@@ -1,27 +1,11 @@
 {% extends '::layout.html.twig' %}
 
-{% block head %}
-    {% javascripts
-        '@MniPagesDemoBundle/Resources/public/js/*'
-        '@MniPagesBundle/Resources/public/js/*' %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
-
-    <script type="text/javascript">
-        var Pages = Pages || {};
-        Pages.componentRoute = '{{ path('mni_pages_component') }}';
-    </script>
-{% endblock %}
-
-{% block title %}MniPagesBundle demo{% endblock %}
-
 {% block content %}
 
-    <h1 class="title">Welcome!</h1>
-
-    <p>This is a demo of the MniPagesBundle.</p>
-
-    <h2>Example of a component</h2>
+    <div class="jumbotron">
+        <h1 class="title">Welcome!</h1>
+        <p class="lead">This is a demo of the MniPagesBundle.</p>
+    </div>
 
     {{ component('MniPagesDemoBundle:RandomNumber') }}
 
