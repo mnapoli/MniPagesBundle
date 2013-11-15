@@ -1,22 +1,31 @@
-<div class="well">
-    <h2>Example of a component</h2>
+<div class="col-lg-6">
+    <div class="well">
 
-    <p>
-        Random number: <code>{{ number }}</code>
-    </p>
-    <p>
-        <button type="button" class="btn btn-primary" data-component-action="generateNumber" data-component-refresh>
-            Generate a new number
-        </button>
-    </p>
-    <p>
-        The "Generate" button will call the action <code>generateNumber()</code> on the component
-        and refresh it without reloading the page. The number is stored in session.
-    </p>
-    <p>
-        As you can see, only one component is refreshed, the other one keeps the old value.
-    </p>
-    <pre><code>&lt;button type=&quot;button&quot; data-component-action=&quot;generateNumber&quot; data-component-refresh&gt;
-    Generate a new number
+        <h2>Example of a component</h2>
+
+        <p>
+            Random number: <code>{{ number }}</code>
+        </p>
+
+        <p>
+            <button type="button" class="btn btn-primary" data-component-action="generateNumber" data-component-refresh>
+                Generate a new number
+            </button>
+        </p>
+
+        <p>
+            The "Generate" button will call the action <code>generateNumber()</code> on the component
+            and refresh it without reloading the page. The number is stored in session.
+        </p>
+
+        <p>
+            As you can see, only one component is refreshed, the other one keeps the old value.
+        </p>
+        <pre><code>&lt;button type=&quot;button&quot;
+    data-component-action=&quot;generateNumber&quot;
+    data-component-refresh&gt;
+        Generate a new number
 &lt;/button&gt;</code></pre>
+
+    </div>
 </div>
