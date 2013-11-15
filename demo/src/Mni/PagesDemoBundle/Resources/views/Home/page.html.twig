@@ -4,14 +4,17 @@
 
     <div class="jumbotron">
 
-        <h1>{{ title }}</h1>
-        <p class="lead">This is a demo of the MniPagesBundle.</p>
+        <h1>
+            {{ title }}
+            <small>This is a demo of the MniPagesBundle.</small>
+        </h1>
 
         <form class="form-inline" data-page-action="setTitle" data-page-refresh>
             <div class="form-group">
                 <input type="text" class="form-control" name="title" placeholder="{{ title }}">
             </div>
-            <button type="submit" class="btn btn-default">Update title</button>
+            <button type="submit" class="btn btn-default">Update title and refresh</button>
+            <small>(this is an example of a page action)</small>
         </form>
 
     </div>
