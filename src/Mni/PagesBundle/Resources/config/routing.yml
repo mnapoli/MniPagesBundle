@@ -1,4 +1,4 @@
 mni_pages_component:
     pattern:  "/component"
-    defaults: { _controller: MniPagesBundle:Component:route }
+    defaults: { _controller: MniPagesBundle:RouteComponentAction:route }
     methods:  [POST]

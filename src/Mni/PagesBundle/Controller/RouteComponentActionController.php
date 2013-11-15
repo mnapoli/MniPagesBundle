@@ -5,7 +5,7 @@ namespace Mni\PagesBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-class ComponentController extends Controller
+class RouteComponentActionController extends Controller
 {
     public function routeAction(Request $request)
     {
