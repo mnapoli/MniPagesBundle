@@ -53,61 +53,20 @@ mni_pages:
 </script>
 ```
 
-## Creating a new page
+## Documentation
 
-- create the route:
+- [Creating a page](docs/pages.md)
 
-```yaml
-home:
-    pattern:  /
-    defaults: { _controller: "AcmeBundle:Home:default" }
+## Demo
+
+The demo is in the `demo/` folder. It's a standard Symfony app, you can get it working easily:
+
+```shell
+$ cd demo/
+$ composer install
+$ app/console server:run
 ```
 
-- create the controller:
+## License
 
-```php
-class HomeController extends Controller
-{
-    public function defaultAction(Request $request)
-    {
-        $page = new HomePage($request, $this->container);
-
-        // POST -> action
-        if ($request->isMethod('POST')) {
-            $action = $request->get('action');
-
-            if ($action == '') {
-                throw new BadRequestHttpException("HTTP parameter 'action' must be given");
-            }
-
-            // Call action
-            $page->$action();
-
-            return $this->redirect($this->generateUrl('home'));
-        }
-
-        return $page->render();
-    }
-}
-```
-
-The `default` action catches all requests to the page.
-
-For a `GET` request, it will display the page.
-For a `POST` request, it will call an action on the page and then redirect to the page.
-
-- create a page in a `Acme\AcmeBundle\Page` namespace:
-
-```php
-namespace Acme\AcmeBundle\Page;
-
-class HomePage extends BasePage
-{
-    public function getTemplate()
-    {
-        return 'AcmeBundle:Home:page.html.twig';
-    }
-}
-```
-
-`getTemplate()` returns the template of your page.
+MniPagesBundle is licensed under the MIT license. See the LICENSE file for more informations.
