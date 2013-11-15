@@ -1,0 +1,3 @@
+# MniPagesDemoBundle routes
+pagesdemo:
+    resource: "@MniPagesDemoBundle/Resources/config/routing.yml"
