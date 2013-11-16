@@ -32,26 +32,13 @@ public function registerBundles()
 }
 ```
 
-- import the routes into `app/config/routing.yml`:
-
-```yaml
-mni_pages:
-    resource: "@MniPagesBundle/Resources/config/routing.yml"
-    prefix:   /mnipages # you can prefix those routes to avoid conflicts with yours
-```
-
-- import the Javascript files into the page and configure it, for example in the `<head>` tag:
+- import the Javascript files in the layout:
 
 ```html
 {% javascripts
     '@MniPagesBundle/Resources/public/js/*' %}
     <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
-
-<script type="text/javascript">
-    var Pages = Pages || {};
-    Pages.componentRoute = "{{ path('mni_pages_component') }}";
-</script>
 ```
 
 ## Documentation
