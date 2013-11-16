@@ -4,7 +4,6 @@ namespace Mni\PagesDemoBundle\Component;
 
 use Mni\PagesBundle\Component\BaseComponent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Example of a component.
@@ -15,11 +14,11 @@ class RandomNumberComponent extends BaseComponent
 
     protected $number;
 
-    public function __construct(Request $request, ContainerInterface $container)
+    public function __construct($id, ContainerInterface $container)
     {
-        parent::__construct($request, $container);
+        parent::__construct($container);
 
-        $this->id = $request->get('id');
+        $this->id = $id;
         $this->number = $this->get('session')->get('number' . $this->id, 0);
     }
 
@@ -37,5 +36,22 @@ class RandomNumberComponent extends BaseComponent
     public function getTemplate()
     {
         return 'MniPagesDemoBundle:RandomNumber:component.html.twig';
+    }
+
+    public function getRoute()
+    {
+        return 'random_number_component';
+    }
+
+    /**
+     * Returns an array of parameters needed to create this component.
+     *
+     * @return array
+     */
+    public function getParameters()
+    {
+        return array(
+            'id' => $this->id,
+        );
     }
 }

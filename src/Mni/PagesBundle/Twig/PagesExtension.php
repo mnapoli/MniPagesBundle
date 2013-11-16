@@ -2,8 +2,10 @@
 
 namespace Mni\PagesBundle\Twig;
 
-use Symfony\Component\HttpKernel\Controller\ControllerReference;
+use Mni\PagesBundle\Component\BaseComponent;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig_Environment;
 use Twig_Extension;
 use Twig_SimpleFunction;
@@ -25,9 +27,15 @@ class PagesExtension extends Twig_Extension
      */
     private $handler;
 
-    public function __construct(FragmentHandler $handler)
+    /**
+     * @var UrlGeneratorInterface
+     */
+    private $urlGenerator;
+
+    public function __construct(FragmentHandler $handler, UrlGeneratorInterface $urlGenerator)
     {
         $this->handler = $handler;
+        $this->urlGenerator = $urlGenerator;
     }
 
     public function getName()
@@ -43,27 +51,46 @@ class PagesExtension extends Twig_Extension
     public function getFunctions()
     {
         return array(
-            new Twig_SimpleFunction('component', array($this, 'component'), array('is_safe' => array('html'))),
+            new Twig_SimpleFunction('component', array($this, 'renderComponent'), array('is_safe' => array('html'))),
         );
     }
 
     /**
      * Renders a component.
      *
-     * @param string $component
-     * @param array  $parameters
-     * @return string
+     * When the Response is a StreamedResponse, the content is streamed immediately
+     * instead of being returned.
+     *
+     * @param BaseComponent $component
+     *
+     * @throws \RuntimeException when the Response is not successful
+     * @return string|null The Response content or null when the Response is streamed
      */
-    public function component($component, array $parameters = array())
+    public function renderComponent(BaseComponent $component)
     {
-        $controller = $component . 'Component:route';
-        $uri = new ControllerReference($controller, $parameters);
+        $response = $component->render();
 
-        $html = $this->handler->render($uri);
+        if (!$response->isSuccessful()) {
+            throw new \RuntimeException(sprintf(
+                'Error when rendering component %s (Status code is %s).',
+                get_class($component),
+                $response->getStatusCode()
+            ));
+        }
 
-        $jsonParameters = json_encode($parameters);
+        $route = $this->urlGenerator->generate($component->getRoute());
+        $parameters = htmlspecialchars(json_encode($component->getParameters()), ENT_QUOTES);
 
-        return "<div data-component='$component' data-parameters='$jsonParameters'>"
-            . $html . "</div>";
+        // Wrap the content into HTML tags
+        $wrapBegin = "<div data-component data-component-route='$route' data-component-parameters='$parameters'>";
+        $wrapEnd = "</div>";
+
+        if (!$response instanceof StreamedResponse) {
+            return $wrapBegin . $response->getContent() . $wrapEnd;
+        }
+
+        echo $wrapBegin;
+        $response->sendContent();
+        echo $wrapEnd;
     }
 }

@@ -20,9 +20,19 @@
     </div>
 
     <div class="row">
-        {{ component('MniPagesDemoBundle:RandomNumber', {id: '1'}) }}
-
-        {{ component('MniPagesDemoBundle:RandomNumber', {id: '2'}) }}
+        <div class="col-lg-6">
+            {{ component(component1) }}
+        </div>
+        <div class="col-lg-6">
+            {{ component(component2) }}
+        </div>
     </div>
+
+    <p class="well">
+        You can also interact with the components from the page:
+        <button type="button" class="btn btn-default" data-page-action="resetNumbers" data-page-refresh>
+            Reset the numbers
+        </button>
+    </p>
 
 {% endblock %}

@@ -5,5 +5,6 @@ services:
         class: Mni\PagesBundle\Twig\PagesExtension
         arguments:
             - "@fragment.handler"
+            - "@router"
         tags:
             - { name: twig.extension }

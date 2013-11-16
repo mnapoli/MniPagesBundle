@@ -20,7 +20,7 @@ abstract class BasePageController extends BaseComponentController
     }
 
     /**
-     * Returns the page class name.
+     * Returns the page's class name.
      *
      * @return string
      */

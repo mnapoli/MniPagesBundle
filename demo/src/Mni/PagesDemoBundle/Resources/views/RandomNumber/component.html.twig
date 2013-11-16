@@ -1,43 +1,41 @@
-<div class="col-lg-6">
-    <div class="well">
+<div class="well">
 
-        <h2>Example of a component ({{ id }})</h2>
+    <h2>Example of a component ({{ id }})</h2>
 
-        <p>
-            Random number: <code>{{ number }}</code>
-        </p>
+    <p>
+        Random number: <code>{{ number }}</code>
+    </p>
 
-        <form class="form-inline pull-right" data-component-action="setNumber" data-component-refresh>
-            <div class="form-group">
-                <input type="text" class="form-control" name="number" placeholder="{{ number }}">
-            </div>
-            <button type="submit" class="btn btn-default">Set number</button>
-        </form>
+    <form class="form-inline pull-right" data-component-action="setNumber" data-component-refresh>
+        <div class="form-group">
+            <input type="text" class="form-control" name="number" placeholder="{{ number }}">
+        </div>
+        <button type="submit" class="btn btn-default">Set number</button>
+    </form>
 
-        <p>
-            <button type="button" class="btn btn-primary" data-component-action="generateNumber"
-                    data-component-refresh>
-                Generate a new number
-            </button>
-        </p>
+    <p>
+        <button type="button" class="btn btn-primary" data-component-action="generateNumber"
+                data-component-refresh>
+            Generate a new number
+        </button>
+    </p>
 
-        <p>
-            The "Generate" button will call the action <code>generateNumber()</code> on the component
-            and refresh it without reloading the page. The number is stored in session.
-        </p>
+    <p>
+        The "Generate" button will call the action <code>generateNumber()</code> on the component
+        and refresh it without reloading the page. The number is stored in session.
+    </p>
 
-        <p>
-            The "Set number" form will call the action <code>setNumber($number)</code>.
-        </p>
+    <p>
+        The "Set number" form will call the action <code>setNumber($number)</code>.
+    </p>
 
-        <p>
-            As you can see, there are two components, but each one has a separate context.
-        </p>
-        <pre><code>&lt;button type=&quot;button&quot;
+    <p>
+        As you can see, there are two components, but each one has a separate context.
+    </p>
+    <pre><code>&lt;button type=&quot;button&quot;
         data-component-action=&quot;generateNumber&quot;
         data-component-refresh&gt;
     Generate a new number
 &lt;/button&gt;</code></pre>
 
-    </div>
 </div>

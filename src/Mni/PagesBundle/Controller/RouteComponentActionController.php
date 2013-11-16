@@ -9,8 +9,7 @@ class RouteComponentActionController extends Controller
 {
     public function routeAction(Request $request)
     {
-        list($bundle, $componentName) = explode(':', $request->get('_componentName'));
-        $controller = "$bundle:{$componentName}Component:route";
+        $controller = $request->get('_componentName') . "Controller::route";
 
         // Forward POST parameters
         $parameters = $this->getRequest()->request->all();

@@ -1,3 +1,7 @@
-home:
+home_page:
     pattern:  /
     defaults: { _controller: "MniPagesDemoBundle:Home:route" }
+
+random_number_component:
+    pattern:  /randomnumber
+    defaults: { _controller: "MniPagesDemoBundle:RandomNumberComponent:route" }

@@ -1,25 +1,12 @@
 /**
  * Pages bundle js library.
  *
- * Requires Pages.componentRoute defined.
  * Requires jQuery.
  *
  * @author Matthieu Napoli <matthieu@mnapoli.fr>
  */
 
 var Pages = Pages || {};
-
-/**
- * To define.
- * @type {string}
- */
-Pages.componentRoute = '';
-Pages.getComponentRoute = function() {
-    if (Pages.componentRoute == '') {
-        throw "'Pages.componentRoute' must be defined and have as value the route: 'mni_pages_component'";
-    }
-    return Pages.componentRoute;
-};
 
 jQuery(function($) {
 
@@ -52,24 +39,19 @@ jQuery(function($) {
 
     /**
      * Component class.
-     * @param {string} name Name of the component, in the form: "AcmeBundle:Name"
-     * @param dom
-     * @param parameters
      * @constructor
      */
-    Pages.Component = function (name, dom, parameters) {
+    Pages.Component = function (dom, route, parameters) {
         var self = this;
 
-        this.name = name;
         this.dom = dom;
+        this.route = route;
         this.parameters = parameters;
 
         // Attach to DOM
         $(this.dom).data('component', this);
 
         this.callAction = function(data, refresh) {
-            data._componentName = self.name;
-
             // Add component's parameters
             for (var key in self.parameters) {
                 if (self.parameters.hasOwnProperty(key) && !data.hasOwnProperty(key)) {
@@ -77,7 +59,7 @@ jQuery(function($) {
                 }
             }
 
-            $.post(Pages.getComponentRoute(), data, function (html) {
+            $.post(self.route, data, function (html) {
                 if (refresh) {
                     $(self.dom).html(html);
                 }
@@ -92,9 +74,9 @@ jQuery(function($) {
     var allComponents = $('[data-component]');
     Pages.components = [];
     allComponents.each(function(index, object) {
-        var name = $(object).attr('data-component');
-        var parameters = JSON.parse($(object).attr('data-parameters'));
-        Pages.components.push(new Pages.Component(name, object, parameters));
+        var route = $(object).attr('data-component-route');
+        var parameters = JSON.parse($(object).attr('data-component-parameters'));
+        Pages.components.push(new Pages.Component(object, route, parameters));
     });
 
     // Page > link or button

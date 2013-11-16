@@ -3,7 +3,6 @@
 namespace Mni\PagesBundle\Component;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 abstract class BaseComponent
@@ -13,7 +12,7 @@ abstract class BaseComponent
      */
     protected $container;
 
-    public function __construct(Request $request, ContainerInterface $container)
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
@@ -53,5 +52,24 @@ abstract class BaseComponent
         return $this->container->get($id);
     }
 
+    /**
+     * Returns the name of the template to render this component.
+     *
+     * @return string
+     */
     abstract public function getTemplate();
+
+    /**
+     * Returns an array of parameters needed to create this component.
+     *
+     * @return array
+     */
+    abstract public function getParameters();
+
+    /**
+     * Returns the component's route.
+     *
+     * @return string
+     */
+    abstract public function getRoute();
 }

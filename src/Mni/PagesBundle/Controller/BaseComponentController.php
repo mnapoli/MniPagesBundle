@@ -2,7 +2,9 @@
 
 namespace Mni\PagesBundle\Controller;
 
+use BadMethodCallException;
 use Mni\PagesBundle\Component\BaseComponent;
+use ReflectionMethod;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,8 +30,16 @@ abstract class BaseComponentController extends Controller
     {
         $componentName = $this->getComponentName();
 
+        // Build the parameter array for the action
+        $reflectionClass = new \ReflectionClass($componentName);
+        try {
+            $parameters = $this->buildParameterArray($reflectionClass->getConstructor(), $request);
+        } catch (BadMethodCallException $e) {
+            throw new BadRequestHttpException("Impossible to create $componentName: " . $e->getMessage());
+        }
+
         /** @var BaseComponent $component */
-        $component = new $componentName($request, $this->container);
+        $component = $reflectionClass->newInstanceArgs($parameters);
 
         if ($request->isMethod('POST')) {
             return $this->routePost($component, $request);
@@ -71,19 +81,11 @@ abstract class BaseComponentController extends Controller
         }
 
         // Build the parameter array for the action
-        $reflectionMethod = new \ReflectionMethod($componentName, $action);
-        $reflectionParameters = $reflectionMethod->getParameters();
-        $parameters = array();
-        foreach ($reflectionParameters as $reflectionParameter) {
-            $value = $request->get($reflectionParameter->getName());
-
-            if ($value === null) {
-                throw new BadRequestHttpException(
-                    "Action $action expect parameter " . $reflectionParameter->getName()
-                );
-            }
-
-            $parameters[] = $value;
+        $reflectionMethod = new ReflectionMethod($componentName, $action);
+        try {
+            $parameters = $this->buildParameterArray($reflectionMethod, $request);
+        } catch (BadMethodCallException $e) {
+            throw new BadRequestHttpException("Impossible to call action: " . $e->getMessage());
         }
 
         // Call action
@@ -113,5 +115,42 @@ abstract class BaseComponentController extends Controller
         }
 
         return $component->render();
+    }
+
+    /**
+     * Build an array of parameters using the request to call a method.
+     *
+     * @param ReflectionMethod $reflectionMethod
+     * @param Request          $request
+     *
+     * @throws BadMethodCallException
+     * @return array
+     */
+    private function buildParameterArray(ReflectionMethod $reflectionMethod, Request $request)
+    {
+        $parameters = array();
+
+        foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
+
+            // Inject container
+            $parameterType = $reflectionParameter->getClass();
+            $containerClass = 'Symfony\Component\DependencyInjection\ContainerInterface';
+            if ($parameterType && $parameterType->implementsInterface($containerClass)) {
+                $parameters[] = $this->container;
+                continue;
+            }
+
+            $value = $request->get($reflectionParameter->getName());
+
+            if ($value === null) {
+                throw new BadMethodCallException(
+                    $reflectionMethod->getName() . "expect parameter " . $reflectionParameter->getName()
+                );
+            }
+
+            $parameters[] = $value;
+        }
+
+        return $parameters;
     }
 }
