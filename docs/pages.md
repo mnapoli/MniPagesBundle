@@ -70,6 +70,11 @@ class HomePage extends BasePage
     {
         return 'AcmeBundle:Home:page.html.twig';
     }
+
+    public function getRoute()
+    {
+        return 'home_page';
+    }
 }
 ```
 
