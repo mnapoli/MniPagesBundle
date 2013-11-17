@@ -154,6 +154,7 @@ public function registerBundles()
 ## Documentation
 
 - [Creating a page](docs/pages.md)
+- [Javascript API](docs/javascript.md)
 
 ## Demo
 

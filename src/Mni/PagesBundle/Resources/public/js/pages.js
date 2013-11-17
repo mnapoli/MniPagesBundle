@@ -67,6 +67,19 @@ jQuery(function($) {
         }
     };
 
+    /**
+     * jQuery plugin for getting a component instance from a DOM object.
+     */
+    $.fn.component = function() {
+        var component = this.data('component');
+
+        if (component !== undefined) {
+            return component;
+        }
+
+        return this.closest('[data-component]').data('component');
+    };
+
     // Create current page
     Pages.currentPage = new Pages.Page();
 
@@ -116,7 +129,7 @@ jQuery(function($) {
     allComponents.on('click', 'a[data-component-action], button[data-component-action]', function(e) {
         e.preventDefault();
 
-        var component = $(this).closest('[data-component]').data('component');
+        var component = $(this).component();
 
         var action = $(this).data('component-action');
         var refreshComponent = ($(this).attr('data-component-refresh') !== undefined);
@@ -133,7 +146,7 @@ jQuery(function($) {
     allComponents.on('submit', 'form[data-component-action]', function(e) {
         e.preventDefault();
 
-        var component = $(this).closest('[data-component]').data('component');
+        var component = $(this).component();
 
         var action = $(this).data('component-action');
         var refreshComponent = ($(this).attr('data-component-refresh') !== undefined);
