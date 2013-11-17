@@ -37,25 +37,8 @@ Example with a form:
 ```yaml
 home:
     pattern:  /
-    defaults: { _controller: "AcmeBundle:Home:route" }
+    defaults: { _page: "Mni\PagesDemoBundle\Page\HomePage" }
 ```
-
-- create the controller:
-
-```php
-class HomeController extends \Mni\PagesBundle\Controller\BasePageController
-{
-    protected function getPageName()
-    {
-        return 'Mni\PagesDemoBundle\Page\HomePage';
-    }
-}
-```
-
-The `default` action catches all requests to the page.
-
-For a `GET` request, it will display the page.
-For a `POST` request, it will call an action on the page and then redirect to the page.
 
 - create a page in a `Acme\AcmeBundle\Page` namespace:
 
@@ -78,7 +61,8 @@ class HomePage extends BasePage
 }
 ```
 
-`getTemplate()` returns the template of your page.
+`getTemplate()` returns the template of your page. It is used by the automatic implementation of the `render()`
+method to render your page.
 
 Every property is passed to the view:
 
