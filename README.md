@@ -2,6 +2,114 @@
 
 Much awesomeness, very good, coming soon.
 
+## What is this?
+
+Typical PHP web frameworks are using controllers and actions:
+
+- a request for a web page leads to an action in a controller
+- an AJAX request leads to an action in a controller
+- a form post leads to an action in a controller
+
+This is a simple pattern, easy to understand, because every request just calls a controller action.
+
+There is another way: component-based architecture.
+This pattern introduces the concept of **Page**, **Component** and **Action**.
+
+- a **Page** returns an HTML web page (wow!)
+- a page can be composed of several reusable **Components**
+- you can call **Actions** on pages or components (through an AJAX request or form post)
+
+### A small example
+
+#### Pages
+
+A page is a class:
+
+```php
+class HomePage extends BasePage
+{
+    protected $title = 'Hello!';
+    protected $pageCountComponent;
+
+    public function __construct()
+    {
+        $this->pageCountComponent = new PageCountComponent();
+    }
+}
+```
+
+and a template:
+
+```html
+{% extends '::layout.html.twig' %}
+
+{% block content %}
+
+    <h1>{{ title }}</h1>
+
+    {{ component(pageCount) }}
+
+{% endblock %}
+```
+
+Each property of the page is accessible in the template.
+
+#### Components
+
+A component is a class too:
+
+```php
+class PageCountComponent extends BaseComponent
+{
+    protected $count;
+
+    public function __construct()
+    {
+        $this->count = $this->get('session')->get('pageCount', 0);
+    }
+}
+```
+
+and a template:
+
+```html
+<p>
+    Page count: {{ count }}.
+</p>
+```
+
+#### Actions
+
+Let's add an action that resets the page count and refresh the component (not the page!):
+
+```html
+<p>
+    Page count: {{ count }}.
+    <button type="button" data-component-action="reset" data-component-refresh>Reset</button>
+</p>
+```
+
+```php
+class PageCountComponent extends BaseComponent
+{
+    protected $count;
+
+    public function __construct()
+    {
+        $this->count = $this->get('session')->get('pageCount', 0);
+    }
+
+    public function reset()
+    {
+        $this->count = 0;
+        $this->get('session')->set('pageCount', 0);
+    }
+}
+```
+
+Easy! The Javascript library already takes care of AJAX requests and refreshing components.
+
+
 ## Getting started
 
 ### Requirements
