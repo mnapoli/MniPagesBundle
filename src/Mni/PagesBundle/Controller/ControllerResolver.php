@@ -11,8 +11,11 @@ use ReflectionFunctionAbstract;
 use ReflectionMethod;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * ControllerResolver.
@@ -55,46 +58,52 @@ class ControllerResolver implements ControllerResolverInterface
      *
      * @param Request $request
      *
+     * @throws HttpException Components can only be called through AJAX
      * @return mixed|boolean
      */
     public function getController(Request $request)
     {
-        $pageName = $request->attributes->get('_page');
-        $componentName = $request->attributes->get('_component');
         // Which action to call
         $action = $request->request->get('_action', 'render');
-
-        if ($action !== 'render') {
+        if ($action && $action !== 'render') {
             // Do we render the page/component after the action has been called
-            $render = $request->request->get('_render', true);
+            $render = $request->request->get('_render', false);
         } else {
             $render = false;
         }
 
+        // Page?
+        $pageName = $request->attributes->get('_page');
         if ($pageName) {
             $page = $this->create($pageName, $request);
 
-            return array($page, $action);
+            // Force render if request is not AJAX (else we have a blank page)
+            if (!$request->isXmlHttpRequest()) {
+                $render = true;
+            }
+
+            if ($render) {
+                return $this->callActionAndRefreshPage($request, $page, $action);
+            }
+
+            return $this->callAction($request, $page, $action);
         }
 
+        // Component?
+        $componentName = $request->attributes->get('_component');
         if ($componentName) {
+            // Check that we only make AJAX calls (a component is not a web page)
+            if (!$request->isXmlHttpRequest()) {
+                throw new HttpException("This method can only be called through POST requests");
+            }
+
             $component = $this->create($componentName, $request);
 
             if ($render) {
-                $resolver = $this;
-                return function () use ($resolver, $request, $component, $action) {
-                    // Call the action
-                    $controller = array($component, $action);
-                    $actionParameters = $resolver->getArguments($request, $controller);
-                    call_user_func_array($controller, $actionParameters);
-                    // Call the render method
-                    $controller = array($component, 'render');
-                    $actionParameters = $resolver->getArguments($request, $controller);
-                    return call_user_func_array($controller, $actionParameters);
-                };
+                return $this->callActionAndRefreshComponent($request, $component, $action);
             }
 
-            return array($component, $action);
+            return $this->callAction($request, $component, $action);
         }
 
         // Use the default resolver
@@ -139,6 +148,84 @@ class ControllerResolver implements ControllerResolverInterface
         $parameters = $this->doGetArguments($request, $reflectionClass->getConstructor());
 
         return $reflectionClass->newInstanceArgs($parameters);
+    }
+
+    /**
+     * Returns the controller that will call an action on a page or component.
+     *
+     * @param Request                $request
+     * @param BasePage|BaseComponent $object
+     * @param string                 $action
+     * @return callable
+     */
+    private function callAction(Request $request, $object, $action)
+    {
+        $resolver = $this;
+
+        return function () use ($resolver, $request, $object, $action) {
+            // Call the action
+            $controller = array($object, $action);
+            $actionParameters = $resolver->getArguments($request, $controller);
+            $response = call_user_func_array($controller, $actionParameters);
+
+            // Automatically handle empty responses
+            return $response ?: new Response();
+        };
+    }
+
+    /**
+     * Returns the controller that will call an action on a component and then render it.
+     *
+     * @param Request       $request
+     * @param BaseComponent $component
+     * @param string        $action
+     * @return callable
+     */
+    private function callActionAndRefreshComponent(Request $request, BaseComponent $component, $action)
+    {
+        $resolver = $this;
+
+        return function () use ($resolver, $request, $component, $action) {
+            // Call the action
+            $controller = array($component, $action);
+            $actionParameters = $resolver->getArguments($request, $controller);
+            call_user_func_array($controller, $actionParameters);
+
+            // Call the render method
+            $controller = array($component, 'render');
+            $actionParameters = $resolver->getArguments($request, $controller);
+            return call_user_func_array($controller, $actionParameters);
+        };
+    }
+
+    /**
+     * Returns the controller that will call an action on a page and then render it.
+     *
+     * @param Request  $request
+     * @param BasePage $page
+     * @param string   $action
+     * @return callable
+     */
+    private function callActionAndRefreshPage(Request $request, BasePage $page, $action)
+    {
+        $resolver = $this;
+
+        return function () use ($resolver, $request, $page, $action) {
+            // Call the action
+            $controller = array($page, $action);
+            $actionParameters = $resolver->getArguments($request, $controller);
+            call_user_func_array($controller, $actionParameters);
+
+            // Redirect to the page if the page is a non-AJAX POST (to avoid re-post with F5)
+            if ($request->isMethod('POST') && !$request->isXmlHttpRequest()) {
+                return new RedirectResponse($request->getUri());
+            }
+
+            // Call the render method
+            $controller = array($page, 'render');
+            $actionParameters = $resolver->getArguments($request, $controller);
+            return call_user_func_array($controller, $actionParameters);
+        };
     }
 
     /**
