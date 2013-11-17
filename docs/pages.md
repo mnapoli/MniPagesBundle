@@ -45,7 +45,9 @@ home:
 ```php
 namespace Acme\AcmeBundle\Page;
 
-class HomePage extends BasePage
+use Mni\PagesBundle\Page\Page;
+
+class HomePage extends Page
 {
     protected $title = 'Hello!';
 
@@ -56,7 +58,7 @@ class HomePage extends BasePage
 
     public function getRoute()
     {
-        return 'home_page';
+        return 'home';
     }
 }
 ```
