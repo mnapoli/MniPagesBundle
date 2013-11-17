@@ -8,7 +8,7 @@
 
 var Pages = Pages || {};
 
-(function($) {
+jQuery(function($) {
 
     /**
      * Page class.
@@ -164,4 +164,4 @@ var Pages = Pages || {};
         component.callAction(data, refreshComponent);
     });
 
-})(jQuery);
+});
