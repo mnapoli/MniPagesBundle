@@ -1,10 +1,14 @@
 parameters:
 
 services:
-    mnapoli.twig.pages_extension:
+    mnipages.twig.pages_extension:
         class: Mni\PagesBundle\Twig\PagesExtension
         arguments:
             - "@fragment.handler"
             - "@router"
         tags:
             - { name: twig.extension }
+
+    mnipages.controller_resolver:
+        class: Mni\PagesBundle\Controller\ControllerResolver
+        arguments: [@default.controller_resolver, @service_container, @?logger]
