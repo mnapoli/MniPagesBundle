@@ -6,6 +6,8 @@ use Mni\PagesBundle\Component\BaseComponent;
 use Mni\PagesBundle\Page\BasePage;
 use Psr\Log\LoggerInterface;
 use ReflectionClass;
+use ReflectionFunction;
+use ReflectionFunctionAbstract;
 use ReflectionMethod;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -59,7 +61,15 @@ class ControllerResolver implements ControllerResolverInterface
     {
         $pageName = $request->attributes->get('_page');
         $componentName = $request->attributes->get('_component');
+        // Which action to call
         $action = $request->request->get('_action', 'render');
+
+        if ($action !== 'render') {
+            // Do we render the page/component after the action has been called
+            $render = $request->request->get('_render', true);
+        } else {
+            $render = false;
+        }
 
         if ($pageName) {
             $page = $this->create($pageName, $request);
@@ -69,6 +79,20 @@ class ControllerResolver implements ControllerResolverInterface
 
         if ($componentName) {
             $component = $this->create($componentName, $request);
+
+            if ($render) {
+                $resolver = $this;
+                return function () use ($resolver, $request, $component, $action) {
+                    // Call the action
+                    $controller = array($component, $action);
+                    $actionParameters = $resolver->getArguments($request, $controller);
+                    call_user_func_array($controller, $actionParameters);
+                    // Call the render method
+                    $controller = array($component, 'render');
+                    $actionParameters = $resolver->getArguments($request, $controller);
+                    return call_user_func_array($controller, $actionParameters);
+                };
+            }
 
             return array($component, $action);
         }
@@ -120,17 +144,17 @@ class ControllerResolver implements ControllerResolverInterface
     /**
      * Build an array of arguments using the request to call a method.
      *
-     * @param Request          $request
-     * @param ReflectionMethod $reflectionMethod
+     * @param Request                    $request
+     * @param ReflectionFunctionAbstract $function
      *
      * @throws RuntimeException
      * @return array
      */
-    private function doGetArguments(Request $request, ReflectionMethod $reflectionMethod)
+    private function doGetArguments(Request $request, ReflectionFunctionAbstract $function)
     {
         $arguments = array();
 
-        foreach ($reflectionMethod->getParameters() as $reflectionParameter) {
+        foreach ($function->getParameters() as $reflectionParameter) {
 
             // Inject container
             $parameterType = $reflectionParameter->getClass();
@@ -153,10 +177,13 @@ class ControllerResolver implements ControllerResolverInterface
                 if ($reflectionParameter->isDefaultValueAvailable()) {
                     $arguments[] = $reflectionParameter->getDefaultValue();
                 } else {
-                    throw new RuntimeException(
-                        $reflectionMethod->getDeclaringClass()->getName() . '::' . $reflectionMethod->getName()
-                        . ' expect parameter ' . $reflectionParameter->getName()
-                    );
+                    if ($function instanceof ReflectionMethod) {
+                        $repr = $function->getDeclaringClass()->getName() . '::' . $function->getName();
+                    } else {
+                        $repr = $function->getName();
+                    }
+
+                    throw new RuntimeException($repr . ' expect parameter ' . $reflectionParameter->getName());
                 }
             }
 
