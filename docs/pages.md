@@ -37,7 +37,7 @@ Example with a form:
 ```yaml
 home:
     pattern:  /
-    defaults: { _page: "Mni\PagesDemoBundle\Page\HomePage" }
+    defaults: { _page: "Mni\\PagesDemoBundle\\Page\\HomePage" }
 ```
 
 - create a page in a `Acme\AcmeBundle\Page` namespace:
