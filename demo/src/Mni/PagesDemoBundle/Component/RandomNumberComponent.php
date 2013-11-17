@@ -35,7 +35,7 @@ class RandomNumberComponent extends Component
 
     public function getTemplate()
     {
-        return 'MniPagesDemoBundle:RandomNumber:component.html.twig';
+        return 'MniPagesDemoBundle::random-number.html.twig';
     }
 
     public function getRoute()

@@ -47,7 +47,7 @@ class HomePage extends Page
 
     public function getTemplate()
     {
-        return 'MniPagesDemoBundle:Home:page.html.twig';
+        return 'MniPagesDemoBundle::home.html.twig';
     }
 
     public function getRoute()
