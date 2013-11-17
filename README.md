@@ -28,7 +28,7 @@ This pattern introduces the concept of **Page**, **Component** and **Action**.
 A page is a class:
 
 ```php
-class HomePage extends BasePage
+class HomePage extends Page
 {
     protected $title = 'Hello!';
     protected $pageCountComponent;
@@ -61,7 +61,7 @@ Each property of the page is accessible in the template.
 A component is a class too:
 
 ```php
-class PageCountComponent extends BaseComponent
+class PageCountComponent extends Component
 {
     protected $count;
 
@@ -92,7 +92,7 @@ Let's add an action that resets the page count and refresh the component (not th
 ```
 
 ```php
-class PageCountComponent extends BaseComponent
+class PageCountComponent extends Component
 {
     protected $count;
 
