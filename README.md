@@ -10,13 +10,15 @@ Typical PHP web frameworks are using controllers and actions:
 - an AJAX request leads to an action in a controller
 - a form post leads to an action in a controller
 
-This is a simple pattern, easy to understand, because every request just calls a controller action.
+This pattern is easy to understand, because every request just calls a controller action.
+But this model doesn't feel natural: even though they all are HTTP requests, at a higher level
+a web page and an AJAX request are not the same thing.
 
 There is another way: component-based architecture.
 This pattern introduces the concept of **Page**, **Component** and **Action**.
 
 - a **Page** returns an HTML web page (wow!)
-- a page can be composed of several reusable **Components**
+- a page can be composed of several reusable **Components** (that returns HTML fragments)
 - you can call **Actions** on pages or components (through an AJAX request or form post)
 
 ### A small example
