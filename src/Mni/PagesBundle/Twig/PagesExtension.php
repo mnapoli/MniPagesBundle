@@ -2,7 +2,7 @@
 
 namespace Mni\PagesBundle\Twig;
 
-use Mni\PagesBundle\Component\BaseComponent;
+use Mni\PagesBundle\Component\Component;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Fragment\FragmentHandler;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -61,12 +61,12 @@ class PagesExtension extends Twig_Extension
      * When the Response is a StreamedResponse, the content is streamed immediately
      * instead of being returned.
      *
-     * @param BaseComponent $component
+     * @param Component $component
      *
      * @throws \RuntimeException when the Response is not successful
      * @return string|null The Response content or null when the Response is streamed
      */
-    public function renderComponent(BaseComponent $component)
+    public function renderComponent(Component $component)
     {
         $response = $component->render();
 

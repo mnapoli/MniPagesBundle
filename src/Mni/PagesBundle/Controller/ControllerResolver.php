@@ -2,8 +2,8 @@
 
 namespace Mni\PagesBundle\Controller;
 
-use Mni\PagesBundle\Component\BaseComponent;
-use Mni\PagesBundle\Page\BasePage;
+use Mni\PagesBundle\Component\Component;
+use Mni\PagesBundle\Page\Page;
 use Psr\Log\LoggerInterface;
 use ReflectionClass;
 use ReflectionFunction;
@@ -138,7 +138,7 @@ class ControllerResolver implements ControllerResolverInterface
      * @param Request $request
      *
      * @throws RuntimeException
-     * @return BasePage|BaseComponent
+     * @return Page|Component
      */
     private function create($className, Request $request)
     {
@@ -154,7 +154,7 @@ class ControllerResolver implements ControllerResolverInterface
      * Returns the controller that will call an action on a page or component.
      *
      * @param Request                $request
-     * @param BasePage|BaseComponent $object
+     * @param Page|Component $object
      * @param string                 $action
      * @return callable
      */
@@ -177,11 +177,11 @@ class ControllerResolver implements ControllerResolverInterface
      * Returns the controller that will call an action on a component and then render it.
      *
      * @param Request       $request
-     * @param BaseComponent $component
+     * @param Component $component
      * @param string        $action
      * @return callable
      */
-    private function callActionAndRefreshComponent(Request $request, BaseComponent $component, $action)
+    private function callActionAndRefreshComponent(Request $request, Component $component, $action)
     {
         $resolver = $this;
 
@@ -202,11 +202,11 @@ class ControllerResolver implements ControllerResolverInterface
      * Returns the controller that will call an action on a page and then render it.
      *
      * @param Request  $request
-     * @param BasePage $page
+     * @param Page $page
      * @param string   $action
      * @return callable
      */
-    private function callActionAndRefreshPage(Request $request, BasePage $page, $action)
+    private function callActionAndRefreshPage(Request $request, Page $page, $action)
     {
         $resolver = $this;
 

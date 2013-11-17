@@ -2,14 +2,14 @@
 
 namespace Mni\PagesDemoBundle\Page;
 
-use Mni\PagesBundle\Page\BasePage;
+use Mni\PagesBundle\Page\Page;
 use Mni\PagesDemoBundle\Component\RandomNumberComponent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Home page
  */
-class HomePage extends BasePage
+class HomePage extends Page
 {
     protected $title;
 

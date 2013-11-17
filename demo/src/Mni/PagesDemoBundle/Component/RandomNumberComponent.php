@@ -2,13 +2,13 @@
 
 namespace Mni\PagesDemoBundle\Component;
 
-use Mni\PagesBundle\Component\BaseComponent;
+use Mni\PagesBundle\Component\Component;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Example of a component.
  */
-class RandomNumberComponent extends BaseComponent
+class RandomNumberComponent extends Component
 {
     protected $id;
 

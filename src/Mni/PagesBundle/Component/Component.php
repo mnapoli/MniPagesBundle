@@ -5,7 +5,7 @@ namespace Mni\PagesBundle\Component;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
-abstract class BaseComponent
+abstract class Component
 {
     /**
      * @var ContainerInterface

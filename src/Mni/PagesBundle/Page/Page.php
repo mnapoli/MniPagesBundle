@@ -2,9 +2,9 @@
 
 namespace Mni\PagesBundle\Page;
 
-use Mni\PagesBundle\Component\BaseComponent;
+use Mni\PagesBundle\Component\Component;
 
-abstract class BasePage extends BaseComponent
+abstract class Page extends Component
 {
     /**
      * Returns an array of parameters needed to create this component.
