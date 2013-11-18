@@ -9,10 +9,15 @@
         <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}
 
-    {% javascripts
-        '@MniPagesDemoBundle/Resources/public/js/*'
-        'bundles/mopabootstrap/bootstrap/dist/js/bootstrap.min.js'
-        '@MniPagesBundle/Resources/public/js/*' %}
+    {% javascripts '@MniPagesDemoBundle/Resources/public/js/*' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    {% javascripts 'bundles/mopabootstrap/bootstrap/dist/js/bootstrap.min.js' %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    {% javascripts '@MniPagesBundle/Resources/public/js/*' %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 </head>
