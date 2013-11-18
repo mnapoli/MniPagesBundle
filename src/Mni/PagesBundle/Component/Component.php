@@ -5,6 +5,11 @@ namespace Mni\PagesBundle\Component;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Abstract class representing a component.
+ *
+ * @author Matthieu Napoli <matthieu@mnapoli.fr>
+ */
 abstract class Component
 {
     /**

@@ -48,6 +48,11 @@ class PagesExtension extends Twig_Extension
         $this->environment = $environment;
     }
 
+    /**
+     * Returns the functions we want to add in Twig.
+     *
+     * @return array
+     */
     public function getFunctions()
     {
         return array(
@@ -56,7 +61,7 @@ class PagesExtension extends Twig_Extension
     }
 
     /**
-     * Renders a component.
+     * Twig function that renders a component.
      *
      * When the Response is a StreamedResponse, the content is streamed immediately
      * instead of being returned.
