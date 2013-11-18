@@ -1,5 +1,16 @@
 {
     "name": "mnapoli/pages-bundle",
+    "description": "Bundle providing pages and components in Symfony 2",
+    "type": "symfony-bundle",
+    "keywords": ["page", "component", "component-based", "mvc", "symfony"],
+    "homepage": "https://github.com/mnapoli/MniPagesBundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Matthieu Napoli",
+            "homepage": "http://mnapoli.fr"
+        }
+    ],
     "autoload": {
         "psr-0": { "Mni": "src/" }
     },
