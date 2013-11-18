@@ -15,10 +15,16 @@ jQuery(function($) {
      * @constructor
      */
     Pages.Page = function () {
+        /**
+         * Call an action on the page.
+         * @param {object} data Parameters used for calling the action
+         * @param {bool}   ajax Should the call be AJAX? Or a page refresh?
+         * @returns {Deferred}
+         */
         this.callAction = function(data, ajax) {
             if (ajax) {
                 // Ajax post
-                $.post(window.location.pathname, data);
+                return $.post(window.location.pathname, data);
             } else {
                 // Non-ajax post
                 var form = $('<form/>', {
@@ -33,6 +39,7 @@ jQuery(function($) {
                     }));
                 });
                 form.appendTo('body').submit();
+                return null;
             }
         }
     };
