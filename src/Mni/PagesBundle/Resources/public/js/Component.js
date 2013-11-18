@@ -32,23 +32,28 @@ var Pages = Pages || {};
     /**
      * Call an action on the component.
      *
-     * @param {object} data    Parameters used for calling the action
+     * @param {string} action  Action to call.
+     * @param {object} data    Parameters used for calling the action.
      * @param {bool}   refresh Should the call refresh the component? Does not issue an additional AJAX request.
      *
      * @returns {Deferred}
      */
-    Pages.Component.prototype.callAction = function(data, refresh)
+    Pages.Component.prototype.callAction = function(action, data, refresh)
     {
         var self = this;
+        data = data || {};
 
         // Add component's parameters
-        for (var key in self.parameters) {
-            if (self.parameters.hasOwnProperty(key) && !data.hasOwnProperty(key)) {
-                data[key] = self.parameters[key];
+        for (var key in this.parameters) {
+            if (this.parameters.hasOwnProperty(key) && !data.hasOwnProperty(key)) {
+                data[key] = this.parameters[key];
             }
         }
 
-        return $.post(self.route, data, function (html) {
+        data._action = action;
+        data._render = refresh;
+
+        return $.post(this.route, data, function(html) {
             if (refresh) {
                 $(self.dom).html(html);
             }
@@ -60,7 +65,8 @@ var Pages = Pages || {};
      *
      * @return {Pages.Component}
      */
-    $.fn.component = function() {
+    $.fn.component = function()
+    {
         var component = this.data('component');
 
         if (component !== undefined) {

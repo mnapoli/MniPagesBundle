@@ -33,6 +33,15 @@
         <button type="button" class="btn btn-default" data-page-action="resetNumbers" data-page-refresh>
             Reset the numbers
         </button>
+        <button id="resetNumbers" type="button" class="btn btn-default" data-page-action="resetNumbers">
+            Reset the numbers without refreshing
+        </button>
     </p>
+
+    <script>
+        $("#resetNumbers").action(function() {
+            alert("Done, you need to refresh the page to see the changes.");
+        });
+    </script>
 
 {% endblock %}

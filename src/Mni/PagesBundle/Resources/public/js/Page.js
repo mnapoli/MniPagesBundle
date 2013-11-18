@@ -22,13 +22,17 @@ var Pages = Pages || {};
     /**
      * Call an action on the page.
      *
-     * @param {object} data Parameters used for calling the action
-     * @param {bool}   ajax Should the call be AJAX? Or a page refresh?
+     * @param {string} action Action to call.
+     * @param {object} data   Parameters used for calling the action
+     * @param {bool}   ajax   Should the call be AJAX? Or a page refresh?
      *
      * @returns {Deferred}
      */
-    Pages.Page.prototype.callAction = function(data, ajax)
+    Pages.Page.prototype.callAction = function(action, data, ajax)
     {
+        data = data || {};
+        data._action = action;
+
         if (ajax) {
             // Ajax post
             return $.post(window.location.pathname, data);
@@ -48,7 +52,8 @@ var Pages = Pages || {};
         });
         form.appendTo('body').submit();
 
-        return null;
+        // Unused deferred object (because the page will be refreshed)
+        return $.Deferred();
     }
 
 })(jQuery);
