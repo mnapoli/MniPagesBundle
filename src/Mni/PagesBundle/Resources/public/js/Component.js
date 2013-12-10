@@ -53,11 +53,13 @@ var Pages = Pages || {};
         data._action = action;
         data._render = refresh;
 
-        return $.post(this.route, data, function(html) {
+        var deferred = $.post(this.route, data, function(html) {
             if (refresh) {
                 $(self.dom).html(html);
             }
         });
+        deferred.fail(Pages.errorHandler);
+        return deferred;
     };
 
     /**

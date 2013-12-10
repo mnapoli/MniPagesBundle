@@ -8,6 +8,11 @@
 
 var Pages = Pages || {};
 
+/**
+ * Override to define your error handler.
+ */
+Pages.errorHandler = function(jqXHR) {};
+
 (function($) {
 
     /**

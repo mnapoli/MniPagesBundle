@@ -2,6 +2,7 @@
 
 The Javascript API is in the `Pages` namespace.
 
+
 ## `Pages.Page`
 
 ### Current page
@@ -19,6 +20,7 @@ Pages.currentPage;
   - `data`: parameters (object) to pass to the action
   - `ajax`: if true, makes an AJAX call, else refresh the page
   - Returns a [`Deferred` object](http://api.jquery.com/category/deferred-object/)
+
 
 ## `Pages.Component`
 
@@ -66,3 +68,19 @@ $("#resetNumbers").action();
 ```
 
 Also works for `<form>` elements.
+
+
+## Error handling
+
+When an action errors, the AJAX request will fail.
+You can attach a custom error handler (the default one doesn't do anything) by defining:
+
+```javascript
+Pages.errorHandler = function(jqXHR) {
+    console.log(jqXHR);
+    alert("An error occurred");
+};
+```
+
+The parameter of the function is a [jQuery jqXHR object](http://api.jquery.com/jQuery.ajax/#jqXHR)
+since this function is bound to the jQuery AJAX request as a "fail" handler.

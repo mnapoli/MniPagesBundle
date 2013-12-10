@@ -35,7 +35,9 @@ var Pages = Pages || {};
 
         if (ajax) {
             // Ajax post
-            return $.post(window.location.pathname, data);
+            var deferred = $.post(window.location.pathname, data);
+            deferred.fail(Pages.errorHandler);
+            return deferred;
         }
 
         // Non-ajax post
